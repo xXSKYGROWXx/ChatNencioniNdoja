@@ -90,15 +90,15 @@ public class Comunica {
         }
     }
 
-    //Serializza in un oggetto JSon e invia il messaggio
-    public void send(Messaggio msg) throws IOException{
+    //Serializzazione in un oggetto JSon e invio del messaggio
+    private void send(Messaggio msg) throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
         String msgStringa = objectMapper.writeValueAsString(msg);
         outVersoServer.writeBytes(msgStringa + "\n");
     }
 
-    //Deserializza l'oggetto JSon ricevuto
-    public Messaggio ricevi() throws IOException{
+    //Deserializzazione dell'oggetto JSon ricevuto
+    private Messaggio ricevi() throws IOException{
         String ricevuto = inDalServer.readLine();
         ObjectMapper objectMapper = new ObjectMapper();
         Messaggio msg = objectMapper.readValue(ricevuto, Messaggio.class);
