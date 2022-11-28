@@ -73,6 +73,7 @@ public class Comunica {
                     Messaggio msg3 = new Messaggio(null,null,null,3);
                     send(msg3);
                     mioSocket.close();
+                    System.exit(0);
                     break;
                 //Messaggio di errore per codice errato
                 default:
