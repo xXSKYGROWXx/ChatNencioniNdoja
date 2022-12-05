@@ -44,14 +44,19 @@ public class ThreadServer extends Thread{
                     send(msg,client);
                     break;
                 case 1:
-
-                    if(utenti.containsKey(msg.getDestinatario()))
+                //manda messaggio
+                    if(!utenti.containsKey(msg.getDestinatario()))
                     {
-                        Socket destinatario = utenti.get(msg.getDestinatario());
-                        send(msg, destinatario);
-                    }
-                    
+                        if(msg.getDestinatario().equals("BROADCAST")){ 
+                            //a tutti
 
+                        }
+                        else{
+                            // a uno
+                            Socket destinatario = utenti.get(msg.getDestinatario()); 
+                            send(msg, destinatario);
+                        }
+                    }
                     break;
                 default:
                     break;
