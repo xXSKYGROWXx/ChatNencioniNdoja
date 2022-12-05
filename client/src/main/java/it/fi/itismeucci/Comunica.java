@@ -14,7 +14,8 @@ public class Comunica {
     String StringaRicevutaDalServer; // stringa ricevuta dal server
     DataOutputStream outVersoServer; // stream output
     BufferedReader inDalServer; // stream input
-    boolean controllo = true;
+    //boolean controllo = true;
+    boolean cServer = true;
     Messaggio msgRicevuto;
     String nome;
 
@@ -30,9 +31,9 @@ public class Comunica {
         while(true){
             System.out.println("Inserisci il nome: ");
             nome = tastiera.readLine();
-            Messaggio msg0 = new Messaggio(nome,null,null,0);
+            Messaggio msg0 = new Messaggio(nome,null,null,0,0);
             send(msg0);
-            while(controllo){}
+            while(cServer){}
             if(msgRicevuto.getContenuto().equals("sisenatore")){
                 System.out.println("Il nome è disponibile");
                 break;
@@ -43,7 +44,7 @@ public class Comunica {
         }
         //Scelta di un'opzione tramite codice
         while(true){
-            controllo = true;
+            //controllo = true;
             System.out.println("Cod = 1 messaggio");
             System.out.println("Cod = 2 richiedi lista");
             System.out.println("Cod = 3 disconessione");
@@ -52,28 +53,27 @@ public class Comunica {
             switch (Integer.parseInt(tastiera.readLine())) {
                 //Invio di un messaggio ad un altro client
                 case 1:
-                    Messaggio msg1 = new Messaggio(null,null,nome,1);                  
+                    Messaggio msg1 = new Messaggio(null,null,nome,1,0);                  
                     System.out.println("Inserire il nome del destinatario");
                     msg1.setDestinatario(tastiera.readLine());
-                    System.out.println("Inserire il contenuto del messaggio");
+                    System.out.println("Inserire il tuo nome");
                     msg1.setContenuto(tastiera.readLine());
                     send(msg1);
-                    while(controllo){} //controllo per verificare se il messaggio è arrivato
-                    System.out.println(msgRicevuto.getContenuto()); 
+                    //while(controllo){} //controllo per verificare se il messaggio è arrivato
+                    //System.out.println(msgRicevuto.getContenuto()); 
                     break;
                 //Stampa della lista dei client connessi
                 case 2:
-                    Messaggio msg2 = new Messaggio(null,null,null,2);
+                    Messaggio msg2 = new Messaggio(null,null,null,2,0);
                     send(msg2);
-                    while(controllo){}
-                    System.out.println(msgRicevuto.getContenuto()); //Nel server dobbiamo inserire la lista in contenuto
+                    //while(controllo){}
+                    //System.out.println(msgRicevuto.getContenuto()); //Nel server dobbiamo inserire la lista in contenuto
                     break;
                 //Disconnessione del client dalla chat
                 case 3:
-                    Messaggio msg3 = new Messaggio(null,null,null,3);
+                    Messaggio msg3 = new Messaggio(null,null,null,3,0);
                     send(msg3);
-                    mioSocket.close();
-                    System.exit(0);
+                    
                     break;
                 //Messaggio di errore per codice errato
                 default:
@@ -86,7 +86,26 @@ public class Comunica {
     public void input() throws IOException {
         for(;/*kebabbata*/;){
            msgRicevuto = ricevi();
-           controllo = false;
+           switch (msgRicevuto.getCod()) {
+            case 0:
+                cServer = false;
+                break;
+           
+            case 1:
+                System.out.println(msgRicevuto.getContenuto()); //verifica se il messaggio è arrivato
+                break;
+            case 2:
+                //riceve la lista e la stampa 
+                break;
+            case 3:
+                //si disconnette
+                mioSocket.close();
+                System.exit(0);
+                break;
+            default:
+                break;
+           }
+        
         }
     }
 

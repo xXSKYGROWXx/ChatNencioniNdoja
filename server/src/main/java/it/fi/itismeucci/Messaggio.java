@@ -5,6 +5,26 @@ public class Messaggio {
     String destinatario;
     String mittente;
     int cod;
+    int serverCod;
+
+    public Messaggio() {
+    }
+    
+    public Messaggio(String contenuto, String destinatario, String mittente, int cod, int serverCod) {
+        this.contenuto = contenuto;
+        this.destinatario = destinatario;
+        this.mittente = mittente;
+        this.cod = cod;
+        this.serverCod = serverCod;
+    }
+
+    public int getServerCod() {
+        return this.serverCod;
+    }
+
+    public void setServerCod(int serverCod) {
+        this.serverCod = serverCod;
+    }
 
     public String getContenuto() {
         return this.contenuto;
