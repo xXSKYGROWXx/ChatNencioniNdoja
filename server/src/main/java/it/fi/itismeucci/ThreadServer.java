@@ -8,13 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ThreadServer extends Thread{
     Socket client;
-    HashMap<String,Socket> utenti;
     DataOutputStream out; // stream output
     BufferedReader in; // stream input
 
-    public ThreadServer(Socket client, HashMap<String,Socket> utenti){
+    public ThreadServer(Socket client){
     this.client = client;
-    this.utenti = utenti;
     }
 
     public void run(){
@@ -31,43 +29,60 @@ public class ThreadServer extends Thread{
         for(;;){
             Messaggio msg = ricevi();
             switch (msg.getCod()) {
-                case 0:
-                    //controlla se il contenuto è un nome valido
-                    if(utenti.containsKey(msg.getContenuto()))
+                case 0: //login
+                    if(Server.utenti.containsKey(msg.getContenuto()))
                     {
-                        msg.setContenuto("nome non valido");
+                        msg.setContenuto("nosenatore");
                     }
                     else{
-                        utenti.put(msg.getContenuto(), client);
+                        Server.utenti.put(msg.getContenuto(), this);
                         msg.setContenuto("sisenatore");
                     }
-                    send(msg,client);
+                    send(msg);
                     break;
                 case 1:
                 //manda messaggio
-                    if(!utenti.containsKey(msg.getDestinatario()))
+                    if(Server.utenti.containsKey(msg.getDestinatario()))
                     {
                         if(msg.getDestinatario().equals("BROADCAST")){ 
                             //a tutti
-
+                            for( Map.Entry<String, ThreadServer> entry  : Server.utenti.entrySet()) {
+                                String key = entry.getKey();
+                                entry.getValue().send(msg);
+                            }
                         }
                         else{
                             // a uno
-                            Socket destinatario = utenti.get(msg.getDestinatario()); 
-                            send(msg, destinatario);
+                            System.out.println(msg.getDestinatario());
+                            ThreadServer destinatario = Server.utenti.get(msg.getDestinatario()); 
+                            destinatario.send(msg);
+                            
                         }
                     }
                     break;
+                case 2:
+                    ArrayList<String> listaNomi = new ArrayList<>();
+                    for( Map.Entry<String, ThreadServer> entry  : Server.utenti.entrySet()) {
+                        String key = entry.getKey();
+                        listaNomi.add(key);
+                    }
+                    msg.setNomiUtenti(listaNomi);
+                    //mette il vecchio mittente in destinatario
+                    msg.setDestinatario(msg.getMittente()); 
+                    msg.setMittente("SERVER");
+                    send(msg);
+                    break;
+
                 default:
                     break;
             }
         }
     }
     //Serializzazione in un oggetto JSon e invio del messaggio
-    private void send(Messaggio msg,Socket socket) throws IOException{
+    private void send(Messaggio msg) throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
         String msgStringa = objectMapper.writeValueAsString(msg);
-        (new DataOutputStream(socket.getOutputStream())).writeBytes(msgStringa + "\n");
+        out.writeBytes(msgStringa + "\n");
     }
 
     //Deserializzazione dell'oggetto JSon ricevuto

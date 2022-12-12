@@ -6,16 +6,16 @@ import java.util.*;
 
 public class Server {
 
-    HashMap<String,Socket> utenti = new HashMap<>();
+    public static HashMap<String,ThreadServer> utenti;
 
     public void connetti() throws IOException {
 
         System.out.println("server partito");
-        ServerSocket server = new ServerSocket(8080);
+        ServerSocket server = new ServerSocket(8088);
 
         for (;;) {
             Socket client = server.accept();
-            (new ThreadServer(client,utenti)).start();
+            new ThreadServer(client).start();
         }
 
     }

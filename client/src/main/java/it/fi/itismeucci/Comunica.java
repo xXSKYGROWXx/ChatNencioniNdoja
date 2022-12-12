@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Comunica {
 
-    int portaServer = 8080; // porta x servizio data e ora
+    int portaServer = 8088; // porta x servizio data e ora
     Socket mioSocket;
     BufferedReader tastiera; // buffer per l'input da tastiera
     String StringaUtente; // stringa inserita da utente
@@ -19,7 +19,8 @@ public class Comunica {
     Messaggio msgRicevuto;
     String nome;
 
-    public Comunica() throws IOException {
+    public Comunica(String nome) throws IOException {
+        this.nome = nome;
         mioSocket = new Socket("127.0.0.1", portaServer);
         tastiera = new BufferedReader(new InputStreamReader(System.in));
         outVersoServer = new DataOutputStream(mioSocket.getOutputStream());
@@ -27,21 +28,8 @@ public class Comunica {
     }
 
     public void output() throws IOException {
-        //Inserimento del nome
-        while(true){
-            System.out.println("Inserisci il nome: ");
-            nome = tastiera.readLine();
-            Messaggio msg0 = new Messaggio(nome,null,null,0,0);
-            send(msg0);
-            while(cServer){}
-            if(msgRicevuto.getContenuto().equals("sisenatore")){
-                System.out.println("Il nome è disponibile");
-                break;
-            }
-            else{
-                System.out.println("Il nome non è disponibile, inserirne un altro");
-            }
-        }
+        
+        
         //Scelta di un'opzione tramite codice
         while(true){
             //controllo = true;
@@ -53,25 +41,26 @@ public class Comunica {
             switch (Integer.parseInt(tastiera.readLine())) {
                 //Invio di un messaggio ad un altro client
                 case 1:
-                    Messaggio msg1 = new Messaggio(null,null,nome,1,0);                  
+                    Messaggio msg1 = new Messaggio(null,null,nome,1);                  
                     System.out.println("Inserire il nome del destinatario");
                     msg1.setDestinatario(tastiera.readLine());
-                    System.out.println("Inserire il tuo nome");
+                    System.out.println("Inserire il contenuto del messaggio");
                     msg1.setContenuto(tastiera.readLine());
                     send(msg1);
+                    System.out.println(mioSocket);
                     //while(controllo){} //controllo per verificare se il messaggio è arrivato
                     //System.out.println(msgRicevuto.getContenuto()); 
                     break;
                 //Stampa della lista dei client connessi
                 case 2:
-                    Messaggio msg2 = new Messaggio(null,null,null,2,0);
+                    Messaggio msg2 = new Messaggio(null,null,null,2);
                     send(msg2);
                     //while(controllo){}
                     //System.out.println(msgRicevuto.getContenuto()); //Nel server dobbiamo inserire la lista in contenuto
                     break;
                 //Disconnessione del client dalla chat
                 case 3:
-                    Messaggio msg3 = new Messaggio(null,null,null,3,0);
+                    Messaggio msg3 = new Messaggio(null,null,null,3);
                     send(msg3);
                     
                     break;
@@ -92,7 +81,7 @@ public class Comunica {
                 break;
            
             case 1:
-                System.out.println(msgRicevuto.getContenuto()); //verifica se il messaggio è arrivato
+                System.out.println(msgRicevuto.getContenuto()); //ricevi messaggio
                 break;
             case 2:
                 //riceve la lista e la stampa 

@@ -1,29 +1,35 @@
 package it.fi.itismeucci;
 
+import java.util.*;
+
 public class Messaggio {
     String contenuto;
     String destinatario;
     String mittente;
     int cod;
-    int serverCod;
+    ArrayList<String> nomiUtenti = new ArrayList<>();
 
-    public Messaggio() {
-    }
     
-    public Messaggio(String contenuto, String destinatario, String mittente, int cod, int serverCod) {
-        this.contenuto = contenuto;
-        this.destinatario = destinatario;
-        this.mittente = mittente;
-        this.cod = cod;
-        this.serverCod = serverCod;
-    }
+    //int serverCod;
 
-    public int getServerCod() {
+    /*public int getServerCod() {
         return this.serverCod;
     }
 
     public void setServerCod(int serverCod) {
+
+    
         this.serverCod = serverCod;
+    }*/
+
+    public Messaggio() {
+    }
+
+    public Messaggio(String contenuto, String destinatario, String mittente, int cod) {
+        this.contenuto = contenuto;
+        this.destinatario = destinatario;
+        this.mittente = mittente;
+        this.cod = cod;
     }
 
     public String getContenuto() {
@@ -57,5 +63,13 @@ public class Messaggio {
     public void setCod(int cod) {
         this.cod = cod;
     }
-    
+
+    public ArrayList<String> getNomiUtenti() {
+        return this.nomiUtenti;
+    }
+
+    public void setNomiUtenti(ArrayList<String> nomiUtenti) {
+        this.nomiUtenti = nomiUtenti;
+    }
+
 }
