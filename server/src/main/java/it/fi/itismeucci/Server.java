@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Server {
 
-    public static HashMap<String,ThreadServer> utenti;
+    public static HashMap<String,ThreadServer> utenti = new HashMap<>();
 
     public void connetti() throws IOException {
 
