@@ -26,7 +26,7 @@ public class ThreadServer extends Thread{
         out = new DataOutputStream(client.getOutputStream());
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-        for(;;){
+        while(true){
             Messaggio msg = ricevi();
             switch (msg.getCod()) {
                 case 0: //login
@@ -42,37 +42,37 @@ public class ThreadServer extends Thread{
                     break;
                 case 1:
                 //manda messaggio
-                    if(Server.utenti.containsKey(msg.getDestinatario()))
-                    {
+                        //a tutti tranne il mittente
                         if(msg.getDestinatario().equals("BROADCAST")){ 
-                            //a tutti
-                            for( Map.Entry<String, ThreadServer> entry  : Server.utenti.entrySet()) {
-                                String key = entry.getKey();
-                                entry.getValue().send(msg);
+                            
+                            for (String key : Server.utenti.keySet()) {
+                                if(!key.equals(msg.mittente))
+                                Server.utenti.get(key).send(msg);
                             }
                         }
-                        else{
-                            // a uno
+                        // a uno
+                        else if(Server.utenti.containsKey(msg.getDestinatario())) //controlla se il dst è nell'hashmap
+                        { 
                             System.out.println(msg.getDestinatario());
                             ThreadServer destinatario = Server.utenti.get(msg.getDestinatario()); 
                             destinatario.send(msg);
-                            
                         }
-                    }
                     break;
-                case 2:
+                case 2: //invio lista
                     ArrayList<String> listaNomi = new ArrayList<>();
-                    for( Map.Entry<String, ThreadServer> entry  : Server.utenti.entrySet()) {
-                        String key = entry.getKey();
+                    for( String key : Server.utenti.keySet()) {
                         listaNomi.add(key);
-                    }
+                    } // crea un arraylist e mette i nomi
                     msg.setNomiUtenti(listaNomi);
-                    //mette il vecchio mittente in destinatario
-                    msg.setDestinatario(msg.getMittente()); 
+                    msg.setDestinatario(msg.getMittente()); //mette il vecchio mittente in destinatario
                     msg.setMittente("SERVER");
                     send(msg);
                     break;
-
+                case 3:
+                    send(msg);
+                    Server.utenti.remove(msg.getMittente());
+                    client.close();
+                    break;
                 default:
                     break;
             }

@@ -35,9 +35,9 @@ public class Client {
                 System.out.println("Il nome non è disponibile, inserirne un altro");
             }
         }
-        Comunica C1 = new Comunica(nome);
-        ThreadInput ti = new ThreadInput(C1);
-        ThreadOutput to = new ThreadOutput(C1);
+        
+        ThreadInput ti = new ThreadInput(inDalServer,mioSocket);
+        ThreadOutput to = new ThreadOutput(tastiera,outVersoServer,nome);
 
         to.start();
         ti.start();
