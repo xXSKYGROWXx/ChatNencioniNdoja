@@ -30,9 +30,9 @@ public class ThreadServer extends Thread{
             Messaggio msg = ricevi();
             switch (msg.getCod()) {
                 case 0: //login
-                    if(Server.utenti.containsKey(msg.getContenuto()))
+                    if(Server.utenti.containsKey(msg.getContenuto()) || msg.getContenuto().equals("BROADCAST") || msg.getContenuto().equals("SERVER") )
                     {
-                        msg.setContenuto("nosenatore");
+                        msg.setContenuto("nosenatore"); 
                     }
                     else{
                         Server.utenti.put(msg.getContenuto(), this);
@@ -58,7 +58,7 @@ public class ThreadServer extends Thread{
                                 if(!key.equals(msg.mittente))
                                 Server.utenti.get(key).send(msg);
                             }
-                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVERONE",msg.getCod());
+                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVER",msg.getCod());
                             ThreadServer rispostaMittente = Server.utenti.get(msgRisMit.getDestinatario()); 
                             rispostaMittente.send(msgRisMit);*/
                         }
@@ -68,7 +68,7 @@ public class ThreadServer extends Thread{
                             System.out.println(msg.getDestinatario());
                             ThreadServer destinatario = Server.utenti.get(msg.getDestinatario()); 
                             destinatario.send(msg);
-                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVERONE",msg.getCod());
+                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVER",msg.getCod());
                             ThreadServer rispostaMittente = Server.utenti.get(msgRisMit.getDestinatario()); 
                             rispostaMittente.send(msgRisMit); */
                         }
