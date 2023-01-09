@@ -43,12 +43,24 @@ public class ThreadServer extends Thread{
                 case 1:
                 //manda messaggio
                         //a tutti tranne il mittente
+                        
                         if(msg.getDestinatario().equals("BROADCAST")){ 
+                            
+                            if(Server.utenti.size() == 1){
+                                msg.setDestinatario(msg.getMittente());
+                                msg.setMittente("SERVER");
+                                msg.setContenuto("sei solo ;(");
+                                Server.utenti.get(msg.getDestinatario()).send(msg);
+                                break;
+                            }
                             
                             for (String key : Server.utenti.keySet()) {
                                 if(!key.equals(msg.mittente))
                                 Server.utenti.get(key).send(msg);
                             }
+                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVERONE",msg.getCod());
+                            ThreadServer rispostaMittente = Server.utenti.get(msgRisMit.getDestinatario()); 
+                            rispostaMittente.send(msgRisMit);*/
                         }
                         // a uno
                         else if(Server.utenti.containsKey(msg.getDestinatario())) //controlla se il dst è nell'hashmap
@@ -56,7 +68,17 @@ public class ThreadServer extends Thread{
                             System.out.println(msg.getDestinatario());
                             ThreadServer destinatario = Server.utenti.get(msg.getDestinatario()); 
                             destinatario.send(msg);
+                            /*Messaggio msgRisMit = new Messaggio("messaggio inviato",msg.getMittente(),"SERVERONE",msg.getCod());
+                            ThreadServer rispostaMittente = Server.utenti.get(msgRisMit.getDestinatario()); 
+                            rispostaMittente.send(msgRisMit); */
                         }
+                        else{
+                            msg.setDestinatario(msg.getMittente());
+                            msg.setMittente("SERVER");
+                            msg.setContenuto("utente non trovato");
+                            Server.utenti.get(msg.getDestinatario()).send(msg);
+                        }
+                        
                     break;
                 case 2: //invio lista
                     ArrayList<String> listaNomi = new ArrayList<>();
