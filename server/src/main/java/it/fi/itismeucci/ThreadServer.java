@@ -26,7 +26,7 @@ public class ThreadServer extends Thread{
         out = new DataOutputStream(client.getOutputStream());
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-        while(true){
+        for(;/*kebabbata*/;){
             Messaggio msg = ricevi();
             switch (msg.getCod()) {
                 case 0: //login

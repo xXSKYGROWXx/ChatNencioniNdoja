@@ -9,18 +9,6 @@ public class Messaggio {
     int cod;
     ArrayList<String> nomiUtenti = new ArrayList<>();
 
-    
-    //int serverCod;
-
-    /*public int getServerCod() {
-        return this.serverCod;
-    }
-
-    public void setServerCod(int serverCod) {
-
-    
-        this.serverCod = serverCod;
-    }*/
 
     public Messaggio() {
     }
