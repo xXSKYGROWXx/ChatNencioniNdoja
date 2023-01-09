@@ -35,7 +35,7 @@ public class ThreadOutput extends Thread {
                 //Invio di un messaggio ad un altro client
                 case 1:
                     Messaggio msg1 = new Messaggio(null,null,nome,1);                  
-                    System.out.println("Inserire il nome del destinatario");
+                    System.out.println("Inserire il nome del destinatario(BROADCAST per mandalo a tutti)");
                     msg1.setDestinatario(tastiera.readLine());
                     System.out.println("Inserire il contenuto del messaggio");
                     msg1.setContenuto(tastiera.readLine());

@@ -27,7 +27,7 @@ public class ThreadInput extends Thread {
            msgRicevuto = ricevi();
            switch (msgRicevuto.getCod()) {
             case 1:
-                System.out.println("\n"+ msgRicevuto.getMittente()+":"+msgRicevuto.getContenuto()); //ricevi messaggio
+                System.out.println("\n"+ msgRicevuto.getMittente()+" : "+msgRicevuto.getContenuto()); //ricevi messaggio
                 break;
             case 2:
                 //riceve la lista e la stampa 
@@ -46,6 +46,7 @@ public class ThreadInput extends Thread {
                 System.exit(0);
                 break;
             default:
+                System.out.println("codice sbagliato");
                 break;
            }
         
